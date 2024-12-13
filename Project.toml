@@ -1,0 +1,4 @@
+name = "GeometricDistributions"
+uuid = "b20d70ac-1ced-44b6-8f67-cab24d52ea6c"
+authors = ["Joaquín Rodríguez <joaq.rod0@gmail.com>"]
+version = "0.0.0"
