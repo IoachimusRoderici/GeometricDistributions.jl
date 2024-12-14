@@ -23,7 +23,7 @@ function Random.rand(rng::AbstractRNG, ::Random.SamplerTrivial{UniformDirection{
     normalize(v)
 end
 
-function Random.rand!(rng::AbstractRNG, v::AbstractArray, ::Random.SamplerTrivial{UniformDirection{T}, T}) where T
+function Random.rand!(rng::AbstractRNG, v::AbstractArray{<:Number}, ::Random.SamplerTrivial{<:UniformDirection})
     randn!(rng, v)
     while iszero(v)
         randn!(rng, v)
