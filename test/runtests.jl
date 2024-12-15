@@ -2,5 +2,5 @@ using Test, Random, LinearAlgebra, GeometryBasics, StaticArrays, StatsBase
 using GeometricDistributions
 
 @testset "GeometricDistributions.jl" begin
-    include("UniformDirection.jl")
+    @testset "UniformDirection" begin include("UniformDirection.jl") end
 end
