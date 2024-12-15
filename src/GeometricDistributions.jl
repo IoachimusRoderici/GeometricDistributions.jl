@@ -19,5 +19,6 @@ end
 
 
 include("UniformDirection.jl")
+include("UniformInsideSphere.jl")
 
 end
