@@ -21,7 +21,7 @@ in the volume of a unit n-sphere: cdf(r) = r^(1/n)
 
 TODO: multiply by radius != 1 for non-unit spheres.
 """
-sample_radius_inside_unit_sphere(rng, ::Type{T}) where T = convert(eltype(T), rand(rng)^inv(length(T)))
+sample_radius_inside_unit_sphere(rng, ::Type{T}) where T = rand(rng, eltype(T))^(one(eltype(T))/length(T))
 
 function Random.rand(rng::AbstractRNG, ::Random.SamplerTrivial{UniformInsideUnitSphere{T}, T}) where T
     # from https://math.stackexchange.com/a/87238

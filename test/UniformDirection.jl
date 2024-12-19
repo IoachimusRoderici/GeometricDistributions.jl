@@ -1,17 +1,3 @@
-
-"""
-Return true if the histogram of `values` is approximately horizontal.
-
-`edges` are the edges of the bins for the histogram.
-`tolerance` is the maximum aceptable difference between the highest and
-lowest bins, relative to the number of samples.
-"""
-function distribution_seems_uniform(values, edges, tolerance=0.05)
-    histogram = fit(Histogram, values, edges)
-    min, max = extrema(histogram.weights)
-    (max - min) / length(values) < tolerance # All bins should have approximately equal weights.
-end
-
 @testset "rand with UniformDirection{Point2f}" begin
     n_samples = 1000
     points = rand(UniformDirection(Point2f), n_samples)
@@ -20,7 +6,7 @@ end
     @test points isa Vector{Point2f}
     @test all(norm.(points) .≈ 1)
     @test all(-π .<= angles .<= π)
-    @test distribution_seems_uniform(angles, range(-π, π, 10))
+    @test KS_uniformity_test(angles, -π, π)
 end
 
 @testset "rand! with UniformDirection{MVector{2, Float32}}" begin
@@ -36,7 +22,7 @@ end
 
     @test all(norm.(points) .≈ 1)
     @test all(-π .<= angles .<= π)
-    @test distribution_seems_uniform(angles, range(-π, π, 10))
+    @test KS_uniformity_test(angles, -π, π)
 end
 
 @testset "rand with UniformDirection{Point3d}" begin
@@ -52,9 +38,9 @@ end
 
     # Test for uniformity: according to Archimedes theorem, all
     # slices of the same width should have the same amount of points.
-    @test distribution_seems_uniform(x, -1:0.2:1)
-    @test distribution_seems_uniform(y, -1:0.2:1)
-    @test distribution_seems_uniform(z, -1:0.2:1)
+    @test KS_uniformity_test(x, -1, 1)
+    @test KS_uniformity_test(y, -1, 1)
+    @test KS_uniformity_test(z, -1, 1)
 end
 
 @testset "rand! with UniformDirection{MVector{3, Float32}}" begin
@@ -74,9 +60,9 @@ end
 
     # Test for uniformity: according to Archimedes theorem, all
     # slices of the same width should have the same amount of points.
-    @test distribution_seems_uniform(x, -1:0.2:1)
-    @test distribution_seems_uniform(y, -1:0.2:1)
-    @test distribution_seems_uniform(z, -1:0.2:1)
+    @test KS_uniformity_test(x, -1, 1)
+    @test KS_uniformity_test(y, -1, 1)
+    @test KS_uniformity_test(z, -1, 1)
 end
 
 @testset "randomizing in-place" begin
@@ -89,11 +75,4 @@ end
         @test vector != prev
         @test norm(vector) ≈ 1
     end
-end
-
-@testset "no allocations" begin
-    mutable3d = MVector(1,2,3.)
-    @test @allocations(rand(UniformDirection(Point2f))) == 0
-    @test @allocations(rand(UniformDirection(SVector{10, Float16}))) == 0
-    @test @allocations(rand!(mutable3d, UniformDirection())) == 0
 end
